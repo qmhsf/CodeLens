@@ -7,11 +7,20 @@
 
 CodeLens 是一个运行在浏览器里的代码学习工具。它不会替你"运行一下猜结果"，而是先把代码**拆开**：每个词属于什么语义、每一行处于什么结构、变量与函数怎么关联、程序一行行执行时内存里发生了什么。所有分析都来自真实的词法/语法解析与内置解释器；遇到不支持的语法或能力，界面会明确告诉你原因，**不猜测、不伪造**。
 
+## 在线演示
+
+- **GitHub Pages（可直接打开使用）**：<https://qmhsf.github.io/CodeLens/>
+- **GitHub 源码仓库**：<https://github.com/qmhsf/CodeLens>
+- 线上版本与本地版本使用同一套 51 项浏览器实机验收，部署后线上复测 **51/51 通过**；所有代码分析与执行仍在你自己的浏览器中完成。
+
+![GitHub Pages 线上演示](docs/screenshots/10-live-github-pages.png)
+
 ---
 
 ## 目录
 
 - [核心功能](#核心功能)
+- [在线演示](#在线演示)
 - [界面说明](#界面说明)
 - [快速开始](#快速开始)
 - [使用指南](#使用指南)
@@ -125,6 +134,14 @@ pnpm dev
 | `node scripts/verify-ui.cjs` | 浏览器实机验收（需先启动 `pnpm dev`，详见下文） |
 
 生产构建是**纯静态文件**：`pnpm build` 后把 `dist/` 交给任意静态服务器即可运行，不需要后端、数据库或 API 服务。
+
+### 部署到线上
+
+本项目已配置 **GitHub Pages 自动部署**：推送到 `main` 后，`.github/workflows/deploy-pages.yml` 会在 GitHub Actions 中安装依赖、构建并发布静态站点。
+
+- **线上地址**：<https://qmhsf.github.io/CodeLens/>
+- 也可以自行部署到 Vercel / Netlify / Cloudflare Pages / Nginx：构建命令 `pnpm build`，发布目录 `dist/`。
+- 因为所有分析、释义、执行都在浏览器本地运行，线上托管只需提供静态文件，不涉及用户代码上传到服务器。
 
 ---
 
@@ -287,6 +304,7 @@ CodeLens/
 ├─ vite.config.ts                # React、Tailwind、@ 别名、开发端口、Vitest 配置
 ├─ tsconfig.json                 # strict + bundler 解析 + @/* 路径别名
 ├─ .github/workflows/ci.yml      # GitHub Actions：安装依赖 → 单元测试 → 生产构建
+├─ .github/workflows/deploy-pages.yml  # 推送到 main 后自动构建并部署 GitHub Pages
 ├─ .vscode/                      # 任务、调试、推荐扩展、工作区设置
 ├─ docs/
 │  ├─ HANDOFF.md                 # 交接文档：状态/环境/文件地图/待办/接手步骤
@@ -368,6 +386,8 @@ pnpm test:watch    # 监听模式
 测试在 Node 环境运行，覆盖：C 词法/语法解析与错误恢复、语言自动识别、语义分类、符号表与关联、结构树、Monaco 装饰规格、统一分析管线、中文伪代码推断与代码生成、JS/TS/Python 结构分析、中文释义、解释器执行快照等。
 
 最近一次实测（2026-11-17）：**6 个测试文件、193 个用例全部通过**。测试数量会随开发变化，请以 `pnpm test` 的实际输出为准。
+
+线上部署验证：将 `CODELENS_URL` 指向 <https://qmhsf.github.io/CodeLens/?debug=1>，同一套浏览器验收脚本也获得 **51/51 通过**（2026-11-17 实测），说明静态部署后的资源路径、Monaco 加载、分析与执行功能均正常。
 
 ### 浏览器实机验收（51 项）
 

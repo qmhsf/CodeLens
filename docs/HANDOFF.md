@@ -18,7 +18,7 @@ CodeLens 是一个**纯前端**的代码结构可视化学习工具：React 19 +
 - **学习笔记**（本地规则生成 Markdown）、**AI 问答接口**（OpenAI 兼容，默认关闭，未配置时用本地规则解释兜底）。
 - 浏览器实机验收脚本（51 项，playwright-core + 系统 Edge）、单元测试、VS Code 工程配置、文档与截图。
 
-**当前状态**：功能可真实运行；单元测试 **6 个文件 / 193 用例全部通过**（2026-11-17 15:23 实测）；`tsc --noEmit` 与 `pnpm build` 通过；浏览器实机验收 **51/51 通过**（15:35 在解释器缺陷修复后复跑）；开发服务器在 `http://127.0.0.1:5173` 运行（如已停止需重新启动）。**已初始化本地 git 仓库（main 分支）并完成首次提交；尚未配置 GitHub 远程仓库**（见第 8 节）。
+**当前状态**：功能可真实运行；单元测试 **6 个文件 / 193 用例全部通过**；`tsc --noEmit` 与 `pnpm build` 通过；本地浏览器实机验收 **51/51 通过**，线上部署后同样 **51/51 通过**；开发服务器在 `http://127.0.0.1:5173` 运行（如已停止需重新启动）。**已推送 GitHub 公共仓库并配置 GitHub Pages 自动部署**：源码 <https://github.com/qmhsf/CodeLens>，在线使用 <https://qmhsf.github.io/CodeLens/>。
 
 ---
 
@@ -53,8 +53,9 @@ CodeLens 是一个**纯前端**的代码结构可视化学习工具：React 19 +
 | 系统 PATH | 默认**不包含** node/pnpm；需要时按下述命令临时加入 PATH |
 | 开发服务器 | `http://127.0.0.1:5173`（由 `vite.config.ts` 指定 host/port；未设置 `strictPort`，端口被占用时会自动后移） |
 | 浏览器验收 | 需要系统安装 Microsoft Edge。脚本默认路径 `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`（写在 `scripts/verify-ui.cjs` 常量中） |
-| 便携 Git（本次用于初始化仓库） | `D:\_tools\git\package\out\cmd\git.exe`（Git 2.45.2.windows.1，未加入系统 PATH）；也可用 `winget install --id Git.Git -e` 安装系统 Git |
-| 本地仓库 | `D:\CodeLens\.git`，分支 `main`，首次提交 `bd886bd`；尚未配置远程 |
+| 便携 Git（本次用于初始化与推送） | `D:\_tools\git\package\out\cmd\git.exe`（Git 2.45.2.windows.1，未加入系统 PATH）；也可用 `winget install --id Git.Git -e` 安装系统 Git |
+| Git 远程仓库 | `origin` = <https://github.com/qmhsf/CodeLens>（public），分支 `main`，已跟踪 `origin/main` |
+| GitHub Pages | <https://qmhsf.github.io/CodeLens/>；由 `.github/workflows/deploy-pages.yml` 在 push 后自动部署；`?debug=1` 仅用于自动化验收 |
 | 版本要求 | Vite 8 要求 Node `^20.19.0 || >=22.12.0`；依赖声明见 `package.json` / `pnpm-lock.yaml` |
 
 ### 2.1 在 PowerShell 中准备命令（当前 DSH 环境）
@@ -168,7 +169,7 @@ cd D:\CodeLens
 - 脚本位置：`scripts/verify-ui.cjs`；使用 `playwright-core` + **系统 Microsoft Edge** 无头模式（不下载浏览器）。
 - 检查内容：页面/品牌、三栏与状态栏、Monaco 语义装饰、9 类图例、结构树行数、释义面板、点击代码后的释义与关联高亮、执行面板与真实快照、变量面板、链表/堆内存可视化、单步推进、输出控制台、执行结束输出、解释深度切换、语义类别开关、本地文件导入与语言识别、伪代码分析/生成代码/执行条件、浅色主题、设置弹窗、控制台无错误、无未捕获异常，共 **51 项**。
 - 通过标准：终端输出 `51/51 项通过`，退出码 0；脚本会重写 `docs/screenshots/01`–`09` （文件导入检查使用内存 File 对象，不再生成临时文件）。
-- 最近记录：**51/51 通过**（2026-11-17 15:35 在解释器修复与 193 个单测之后复跑；截图 `01`–`09` 即由该脚本生成）。
+- 最近记录：**51/51 通过**（2026-11-17 在解释器修复与 193 个单测之后复跑；截图 `01`–`09` 由脚本生成，`10-live-github-pages.png` 为线上部署截图）。线上部署后访问 `https://qmhsf.github.io/CodeLens/?debug=1` 使用同一脚本复测，同样 **51/51 通过**。
 - 如 Edge 不在默认路径：修改脚本顶部 `const EDGE = '...'`；可用环境变量覆盖被测地址 `CODELENS_URL`（PowerShell：`$env:CODELENS_URL="http://127.0.0.1:5173"`）。
 
 ---
@@ -403,20 +404,11 @@ D:\CodeLens
 
 ## 8. 已知问题与待办（按优先级）
 
-### P0（接手后优先处理）
+### P0（已完成的工程收尾）
 
-1. **GitHub 远程仓库尚未配置（本地 git 已初始化）**：本地仓库位于 `D:\CodeLens\.git`，`main` 分支已有首次提交 `bd886bd`。需要用户提供 GitHub 仓库地址与凭据（PAT / SSH）后执行：
-   ```powershell
-   cd D:\CodeLens
-   # 当前环境未安装系统 Git；本次使用便携版 Git：
-   $env:PATH = "D:\_tools\git\package\out\cmd;D:\_tools\git\package\out\mingw64\bin;$env:PATH"
-   git remote add origin https://github.com/<username>/<repo>.git
-   git push -u origin main
-   ```
-   注意：Windows 上 `git ls-remote` 可能触发 Git Credential Manager 图形窗口（本次已出现并关闭）；无人值守推送应使用带 PAT 的 HTTPS 地址或预先配置凭据，不要在自动化脚本中等待 GUI。
-   也可以先安装 Git for Windows（`winget install --id Git.Git -e`）后使用普通 `git` 命令。`.gitignore` 已就绪（忽略 `node_modules/`、`dist/`、`*.tsbuildinfo`、日志、临时截图等；`docs/screenshots/01`–`09`、源码、文档会提交）。
-2. **浏览器验收**：已在解释器修复与新增测试后复跑，**51/51 通过**（见 3.4）；后续改动 UI/解析器/解释器后请再次复跑。
-3. **CI**：已添加 `.github/workflows/ci.yml`（install → test → build），首次 push 到 GitHub 后生效；浏览器验收因依赖 Windows + Edge 暂未接入 CI。
+1. ~~**GitHub 远程仓库**~~：已完成。公共仓库 <https://github.com/qmhsf/CodeLens>，`main` 已推送并跟踪 `origin/main`；GitHub Pages <https://qmhsf.github.io/CodeLens/> 由 `.github/workflows/deploy-pages.yml` 自动部署。
+2. ~~**浏览器验收**~~：本地与线上均已完成，均 **51/51 通过**（见 3.4）。
+3. **CI**：`.github/workflows/ci.yml`（install → test → build）已在 GitHub Actions 成功运行；GitHub Pages 部署工作流也已成功。浏览器验收因依赖 Windows + Edge 暂未接入 CI。后续改动 UI/解析器/解释器后请在本地复跑验收。
 
 ### P1（近期）
 
@@ -424,7 +416,7 @@ D:\CodeLens
 5. ~~**C++ 能力文案不一致**~~：`LANGUAGE_OPTIONS` 中 C++ 的 `supportNote` 已改为"按 C 子集解析；class / template / STL / new / delete 等 C++ 特性暂不支持"。
 6. **Monaco 体积大**：主 JS 约 5MB、TS Worker 约 6.6MB；建议改为只引入 `monaco-editor/esm/vs/editor/editor.api` + 必要 Worker，或按需加载，见 ROADMAP 4.6。
 7. **自动语言识别是启发式**：无扩展名内容里出现 `class` 会被 C++ 特征先匹配（`detectLanguage` 中 `hasCppMarker` 在 JS 检测之前），可能误判；目前靠手动切换兜底。改进方案见 ROADMAP 4.2。
-8. **`scripts/verify-ui.cjs` 与 debug 脚本写死 Edge 路径**：换机器或 Edge 安装位置不同会失败；建议改为环境变量/自动探测。
+8. **`scripts/verify-ui.cjs` 写死 Edge 路径**：换机器或 Edge 安装位置不同会失败；建议改为环境变量/自动探测。
 9. **AI 未配置时仅本地规则**：这是设计行为，不是 bug；但用户可能误以为是 AI。UI 与文档已明确标注。AI 没有流式输出、没有服务商预设，超时 45s、代码上下文截断 8000 字符。
 10. **JS/TS/Python 无执行、C++ 仅 C 子集**：能力边界已在界面与文档中声明；扩展计划见 ROADMAP 4.2/4.3。
 11. **无移动端实机验证**：CSS 只有基础窄屏适配（≤980px 侧栏浮层化、≤720px 隐藏部分信息）；触控/横屏/小屏未验证。

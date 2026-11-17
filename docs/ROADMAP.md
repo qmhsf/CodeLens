@@ -80,12 +80,13 @@
 ### 3.4 验收与文档
 
 - [x] 浏览器实机验收脚本 `scripts/verify-ui.cjs`（playwright-core + 系统 Edge，51 项检查；最近一次运行 51/51 通过）
-- [x] 实机截图 10 张（`docs/screenshots/01`–`09` + `05b`）
+- [x] 实机截图 11 张（`docs/screenshots/01`–`10` + `05b`）
 - [x] `README.md`、`docs/HANDOFF.md`、`docs/ROADMAP.md`
 - [x] VS Code 工程配置（`.vscode/tasks.json`、`launch.json`、`settings.json`、`extensions.json`）与 `.editorconfig`、`.gitignore`
-- [x] Git 本地仓库初始化 + 首次提交；GitHub Actions CI 工作流（`.github/workflows/ci.yml`）
+- [x] Git 仓库已推送：<https://github.com/qmhsf/CodeLens>；GitHub Actions CI 与 GitHub Pages 自动部署均已成功运行
+- [x] 线上站点 <https://qmhsf.github.io/CodeLens/> 通过同一套 51 项浏览器验收（2026-11-17 实测）
 
-**阶段完成标准**：伪代码示例可展示原文/推断/生成代码；JS/Python 可分析且明确不执行；笔记可下载；AI 未配置时行为与提示正确；浏览器 51 项验收通过。
+**阶段完成标准**：伪代码示例可展示原文/推断/生成代码；JS/Python 可分析且明确不执行；笔记可下载；AI 未配置时行为与提示正确；本地与线上浏览器 51 项验收均通过。
 
 ---
 
@@ -95,8 +96,9 @@
 
 ### 4.1 工程质量与收尾（P0，建议最先做）
 
-- [ ] **配置 Git 远程仓库并推送**：本地 `main` 已初始化并完成首次提交（便携 Git 见 HANDOFF §8）；待用户提供 GitHub 仓库地址与凭据后 `git remote add origin ... && git push -u origin main`。
-- [x] **CI 工作流文件**：`.github/workflows/ci.yml` 已添加（`pnpm install --frozen-lockfile` → `pnpm test` → `pnpm build`）；首次 push 后生效。
+- [x] **配置 Git 远程仓库并推送**：已推送 <https://github.com/qmhsf/CodeLens>（public，`main`）。
+- [x] **GitHub Pages 自动部署**：`.github/workflows/deploy-pages.yml`；线上地址 <https://qmhsf.github.io/CodeLens/>。
+- [x] **CI 工作流文件**：`.github/workflows/ci.yml` 已添加（`pnpm install --frozen-lockfile` → `pnpm test` → `pnpm build`），首次 push 后已成功运行。
 - [x] **保持测试全绿并为新功能补测**：当前 6 个测试文件 / 193 用例全部通过（cParser、analysis、pseudo、languages、explain、interpreter）；新增能力必须补对应用例，禁止为了"变绿"弱化断言。
 - [ ] **浏览器验收接入 CI**：Windows Runner 上安装/启用 Edge 后运行 `node scripts/verify-ui.cjs`（需先启动 dev server 或 preview server）。
 - [x] ~~**清理无效脚本**~~：`package.json` 的 `parse:cli` 已删除。

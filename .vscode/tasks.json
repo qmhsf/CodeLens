@@ -78,7 +78,7 @@
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
     },
     {
-      "label": "verify-ui: 浏览器实机验收（33 项）",
+      "label": "verify-ui: 浏览器实机验收（51 项）",
       "detail": "需先运行「dev: 启动开发服务器」；脚本用 playwright-core + 系统 Microsoft Edge，截图写入 docs/screenshots/",
       "type": "shell",
       "command": "pnpm",

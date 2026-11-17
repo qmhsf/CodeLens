@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  // 调试前请先启动开发服务器：终端运行 pnpm dev（或执行任务「dev: 启动开发服务器」）。
+  // CodeLens 是纯前端应用，调试对象是 http://127.0.0.1:5173 上的 Vite 页面。
+  "configurations": [
+    {
+      "type": "msedge",
+      "request": "launch",
+      "name": "Edge: 打开 CodeLens 页面",
+      "url": "http://127.0.0.1:5173",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "smartStep": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "type": "msedge",
+      "request": "attach",
+      "name": "Edge: 附加到已开启调试的浏览器（端口 9222）",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Vitest: 调试当前测试文件",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "${relativeFile}"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    }
+  ]
+}

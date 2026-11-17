@@ -1,0 +1,15 @@
+{
+  // CodeLens 推荐扩展（仅建议，不影响项目运行）
+  // 打开工作区时 VS Code 会提示安装；按需选择即可。
+  "recommendations": [
+    // Vitest 测试资源管理器：在侧栏直接运行 tests/ 下的用例
+    "vitest.explorer",
+    // Tailwind CSS 4 智能提示（项目使用 @tailwindcss/vite 插件）
+    "bradlc.vscode-tailwindcss",
+    // Microsoft Edge DevTools：配合 .vscode/launch.json 调试页面
+    "ms-edgedevtools.vscode-edge-devtools",
+    // .editorconfig 支持：统一缩进与换行风格
+    "editorconfig.editorconfig"
+  ],
+  "unwantedRecommendations": []
+}

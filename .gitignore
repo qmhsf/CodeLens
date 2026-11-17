@@ -1,0 +1,45 @@
+# ============================================================
+# CodeLens .gitignore
+# 源码、文档与配置需要提交；依赖、构建产物与临时文件忽略。
+# ============================================================
+
+# ---- 依赖与包管理器缓存 ----
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+
+# ---- 构建产物 ----
+dist/
+dist-ssr/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# ---- 日志与临时文件 ----
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tmp
+*.temp
+
+# ---- 浏览器验证/调试产生的临时文件 ----
+# 01-07 截图是文档素材，需要提交；失败截图与临时 fixture 不提交。
+docs/screenshots/99-failure.png
+docs/screenshots/debug-*.png
+docs/fixtures/import-test.c
+
+# ---- 环境变量与本机私有配置 ----
+.env
+.env.*
+!.env.example
+.vscode/*.local.json
+
+# ---- 编辑器与操作系统文件 ----
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+*.swp
+*.swo

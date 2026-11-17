@@ -1,0 +1,47 @@
+{
+  // ============================================================
+  // CodeLens 工作区设置（VS Code 专用，可含注释）
+  // 说明：项目使用 TypeScript 7 的原生编译器（包内没有 lib/tsserver.js），
+  // 因此这里刻意不设置 "typescript.tsdk"，编辑器语言服务继续使用 VS Code 自带的 TS。
+  // ============================================================
+
+  // ---- 文件与编码 ----
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "files.associations": {
+    "*.pseudo": "plaintext"
+  },
+
+  // ---- 编辑器基础风格（与 .editorconfig 保持一致）----
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.rulers": [120],
+  "editor.formatOnSave": false,
+
+  // ---- 浏览与搜索：排除构建产物，保留源码可搜索 ----
+  "files.exclude": {
+    "dist": true,
+    "*.tsbuildinfo": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "dist": true,
+    "**/*.tsbuildinfo": true,
+    "docs/screenshots": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true
+  },
+
+  // ---- Vitest 扩展：在测试资源管理器中直接运行 tests/ 用例 ----
+  "vitest.enable": true,
+
+  // ---- 其他小设置 ----
+  "explorer.compactFolders": false,
+  "search.useIgnoreFiles": true
+}

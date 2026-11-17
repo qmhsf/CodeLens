@@ -1,0 +1,103 @@
+{
+  "version": "2.0.0",
+  // Ctrl/Cmd + Shift + B 运行默认任务；所有命令均以工作区根目录（D:\CodeLens）为 cwd。
+  // 本机 pnpm/node 若不在系统 PATH 中，请先参考 docs/HANDOFF.md 的「运行环境」设置 PATH。
+  "tasks": [
+    {
+      "label": "install: 安装依赖",
+      "detail": "pnpm install（依赖已安装时可跳过）",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["install"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "dev: 启动开发服务器",
+      "detail": "pnpm dev → http://127.0.0.1:5173（后台运行，Ctrl+C 停止）",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dev"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "build: 类型检查并构建",
+      "detail": "pnpm build → tsc -b && vite build，产物在 dist/",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["build"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$tsc"],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "typecheck: 仅类型检查",
+      "detail": "pnpm typecheck（tsc -b --noEmit，不生成文件）",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["typecheck"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": ["$tsc"],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "test: 运行全部单元测试",
+      "detail": "pnpm test → vitest run（tests/**/*.test.ts）",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "test: 监听模式",
+      "detail": "pnpm test:watch，修改代码后自动重跑相关测试",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test:watch"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "test: 当前测试文件",
+      "detail": "对当前打开的 *test.ts 运行 vitest（需先打开一个测试文件）",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["exec", "vitest", "run", "${relativeFile}"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "verify-ui: 浏览器实机验收（33 项）",
+      "detail": "需先运行「dev: 启动开发服务器」；脚本用 playwright-core + 系统 Microsoft Edge，截图写入 docs/screenshots/",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["exec", "node", "scripts/verify-ui.cjs"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "preview: 预览生产构建",
+      "detail": "pnpm preview（需先 pnpm build；默认 http://localhost:4173）",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["preview"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    }
+  ]
+}

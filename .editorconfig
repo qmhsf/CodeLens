@@ -1,0 +1,40 @@
+# ============================================================
+# CodeLens  EditorConfig
+# 统一不同编辑器/IDE 的缩进、换行与编码风格。
+# VS Code 需安装 EditorConfig 扩展（已列入 .vscode/extensions.json）。
+# ============================================================
+
+root = true
+
+# ---- 默认规则：UTF-8、LF、2 空格缩进、行尾不留空白 ----
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# ---- Markdown：保留行尾空格（用于换行），允许行尾空白 ----
+[*.md]
+trim_trailing_whitespace = false
+
+# ---- Python 示例/脚本：4 空格缩进 ----
+[*.py]
+indent_size = 4
+
+# ---- C / C++ 代码（docs/fixtures 下的样例）：4 空格缩进 ----
+[*.{c,h,cpp,cxx,cc,hpp}]
+indent_size = 4
+
+# ---- 配置文件：2 空格缩进 ----
+[*.{json,jsonc,yml,yaml}]
+indent_size = 2
+
+# ---- 浏览器验收脚本（CommonJS）：2 空格缩进 ----
+[scripts/*.cjs]
+indent_size = 2
+
+# ---- 生成文件不做风格要求 ----
+[*.{png,jpg,jpeg,gif,webp,ico,ttf,woff,woff2}]
+insert_final_newline = false

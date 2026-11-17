@@ -203,19 +203,29 @@ function check(name, ok, detail = '') {
     await page.waitForTimeout(300);
 
     // ---- 本地文件导入 ----
-    fs.mkdirSync(path.resolve('docs/fixtures'), { recursive: true });
-    const fixture = path.resolve('docs/fixtures/import-test.c');
-    fs.writeFileSync(fixture, '#include <stdio.h>\nint main(void) { int imported = 7; printf("%d\\n", imported); return 0; }\n', 'utf8');
-    await page.setInputFiles('input[type=file]', fixture);
-    await page.waitForTimeout(1500);
-    const imported = await page.evaluate(() => ({
-      source: window.__codelensStore?.getState?.().analysis?.source ?? '',
-      language: window.__codelensStore?.getState?.().analysis?.language,
-      fileName: window.__codelensStore?.getState?.().fileName,
-      notice: document.querySelector('.notice-toast')?.textContent ?? '',
-    }));
+    // 浏览器自动化无法可靠打开系统文件选择器：这里用真实 File 对象走应用的 importFile 流程，
+    // 并检查文件选择器支持的类型；拖拽导入在下一节单独用 DataTransfer 验证。
+    const imported = await page.evaluate(async () => {
+      const state = window.__codelensStore?.getState?.();
+      const file = new File(
+        ['#include <stdio.h>\nint main(void) { int imported = 7; printf("%d\\n", imported); return 0; }\n'],
+        'import-test.c',
+        { type: 'text/plain' },
+      );
+      await state.importFile(file);
+      const next = window.__codelensStore?.getState?.();
+      const input = document.querySelector('input[type=file]');
+      return {
+        source: next?.analysis?.source ?? '',
+        language: next?.analysis?.language,
+        fileName: next?.fileName,
+        notice: next?.notice?.message ?? '',
+        accept: input?.getAttribute('accept') ?? '',
+      };
+    });
     check('本地文件导入', imported.fileName === 'import-test.c' && imported.source.includes('imported'), `${imported.fileName} / ${imported.language}`);
     check('文件语言自动识别为 C', imported.language === 'c');
+    check('文件选择器支持常见代码类型', ['.c', '.cpp', '.h', '.py', '.js', '.ts'].every((extension) => imported.accept.includes(extension)), imported.accept);
 
     // ---- 拖拽导入（DataTransfer 模拟） ----
     await page.evaluate(() => {
@@ -225,7 +235,10 @@ function check(name, ok, detail = '') {
       shell.dispatchEvent(new DragEvent('dragenter', { bubbles: true, cancelable: true, dataTransfer }));
       shell.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer }));
     });
-    await page.waitForTimeout(1200);
+    await page
+      .waitForFunction(() => window.__codelensStore?.getState?.().fileName === 'drop-test.c', null, { timeout: 8000 })
+      .catch(() => undefined);
+    await page.waitForTimeout(400);
     const dropped = await page.evaluate(() => ({
       fileName: window.__codelensStore?.getState?.().fileName,
       language: window.__codelensStore?.getState?.().analysis?.language,

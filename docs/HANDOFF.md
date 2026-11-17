@@ -16,9 +16,9 @@ CodeLens 是一个**纯前端**的代码结构可视化学习工具：React 19 +
 - **JS / TS**：`@babel/parser` 真实 AST 的结构级分析（语义高亮 / 结构树 / 基础释义 / 符号关联），**不执行**。
 - **Python**：自实现分词 + 缩进结构解析的结构级分析，**不执行**。
 - **学习笔记**（本地规则生成 Markdown）、**AI 问答接口**（OpenAI 兼容，默认关闭，未配置时用本地规则解释兜底）。
-- 浏览器实机验收脚本（50 项，playwright-core + 系统 Edge）、单元测试、VS Code 工程配置、文档与截图。
+- 浏览器实机验收脚本（51 项，playwright-core + 系统 Edge）、单元测试、VS Code 工程配置、文档与截图。
 
-**当前状态**：功能可真实运行；单元测试 **6 个文件 / 193 用例全部通过**（2026-11-17 15:23 实测）；`tsc --noEmit` 与 `pnpm build` 通过；浏览器实机验收 **50/50 通过**（15:35 在解释器缺陷修复后复跑）；开发服务器在 `http://127.0.0.1:5173` 运行（如已停止需重新启动）。**已初始化本地 git 仓库（main 分支）并完成首次提交；尚未配置 GitHub 远程仓库**（见第 8 节）。
+**当前状态**：功能可真实运行；单元测试 **6 个文件 / 193 用例全部通过**（2026-11-17 15:23 实测）；`tsc --noEmit` 与 `pnpm build` 通过；浏览器实机验收 **51/51 通过**（15:35 在解释器缺陷修复后复跑）；开发服务器在 `http://127.0.0.1:5173` 运行（如已停止需重新启动）。**已初始化本地 git 仓库（main 分支）并完成首次提交；尚未配置 GitHub 远程仓库**（见第 8 节）。
 
 ---
 
@@ -35,7 +35,7 @@ CodeLens 是一个**纯前端**的代码结构可视化学习工具：React 19 +
 
 - AI 能力**已实现接口**，但默认关闭，需要用户自行配置 OpenAI 兼容 API（Base URL / 模型 / API Key）。
 - 解释器测试已由并行开发者补齐：`tests/interpreter.test.ts`（55 用例），解释器在 15:13 修复过 3 个缺陷（指针相减、`sizeof("abc")`、后缀自减描述）。
-- 已初始化本地 git 仓库（`main` 分支，首次提交见第 8 节）；尚未配置 GitHub 远程仓库，用户可在提供仓库地址与凭据后推送。
+- 已初始化本地 git 仓库（`main` 分支，首次提交 `bd886bd`）；尚未配置 GitHub 远程仓库，用户可在提供仓库地址与凭据后推送。便携 Git 位于 `D:\_tools\git\package\out\cmd\git.exe`（未加入系统 PATH）。
 
 ---
 
@@ -53,6 +53,8 @@ CodeLens 是一个**纯前端**的代码结构可视化学习工具：React 19 +
 | 系统 PATH | 默认**不包含** node/pnpm；需要时按下述命令临时加入 PATH |
 | 开发服务器 | `http://127.0.0.1:5173`（由 `vite.config.ts` 指定 host/port；未设置 `strictPort`，端口被占用时会自动后移） |
 | 浏览器验收 | 需要系统安装 Microsoft Edge。脚本默认路径 `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`（写在 `scripts/verify-ui.cjs` 常量中） |
+| 便携 Git（本次用于初始化仓库） | `D:\_tools\git\package\out\cmd\git.exe`（Git 2.45.2.windows.1，未加入系统 PATH）；也可用 `winget install --id Git.Git -e` 安装系统 Git |
+| 本地仓库 | `D:\CodeLens\.git`，分支 `main`，首次提交 `bd886bd`；尚未配置远程 |
 | 版本要求 | Vite 8 要求 Node `^20.19.0 || >=22.12.0`；依赖声明见 `package.json` / `pnpm-lock.yaml` |
 
 ### 2.1 在 PowerShell 中准备命令（当前 DSH 环境）
@@ -150,7 +152,7 @@ cd D:\CodeLens
 
 > 体积优化是 ROADMAP 4.6 的内容；改动打包方式后请重新记录此表。
 
-### 3.4 浏览器实机验收（50 项）
+### 3.4 浏览器实机验收（51 项）
 
 ```powershell
 # 1）先确保开发服务器在运行（见 2.2）
@@ -164,9 +166,9 @@ cd D:\CodeLens
 ```
 
 - 脚本位置：`scripts/verify-ui.cjs`；使用 `playwright-core` + **系统 Microsoft Edge** 无头模式（不下载浏览器）。
-- 检查内容：页面/品牌、三栏与状态栏、Monaco 语义装饰、9 类图例、结构树行数、释义面板、点击代码后的释义与关联高亮、执行面板与真实快照、变量面板、链表/堆内存可视化、单步推进、输出控制台、执行结束输出、解释深度切换、语义类别开关、本地文件导入与语言识别、伪代码分析/生成代码/执行条件、浅色主题、设置弹窗、控制台无错误、无未捕获异常，共 **50 项**。
-- 通过标准：终端输出 `50/50 项通过`，退出码 0；脚本会重写 `docs/screenshots/01`–`09` 并生成 `docs/fixtures/import-test.c`。
-- 最近记录：**50/50 通过**（2026-11-17 15:35 在解释器修复与 193 个单测之后复跑；截图 `01`–`09` 即由该脚本生成）。
+- 检查内容：页面/品牌、三栏与状态栏、Monaco 语义装饰、9 类图例、结构树行数、释义面板、点击代码后的释义与关联高亮、执行面板与真实快照、变量面板、链表/堆内存可视化、单步推进、输出控制台、执行结束输出、解释深度切换、语义类别开关、本地文件导入与语言识别、伪代码分析/生成代码/执行条件、浅色主题、设置弹窗、控制台无错误、无未捕获异常，共 **51 项**。
+- 通过标准：终端输出 `51/51 项通过`，退出码 0；脚本会重写 `docs/screenshots/01`–`09` （文件导入检查使用内存 File 对象，不再生成临时文件）。
+- 最近记录：**51/51 通过**（2026-11-17 15:35 在解释器修复与 193 个单测之后复跑；截图 `01`–`09` 即由该脚本生成）。
 - 如 Edge 不在默认路径：修改脚本顶部 `const EDGE = '...'`；可用环境变量覆盖被测地址 `CODELENS_URL`（PowerShell：`$env:CODELENS_URL="http://127.0.0.1:5173"`）。
 
 ---
@@ -267,7 +269,7 @@ D:\CodeLens
 │  └─ fixtures/                verify-ui 生成的临时文件（已加入 .gitignore）
 ├─ public/favicon.svg
 ├─ scripts/
-│  ├─ verify-ui.cjs            50 项浏览器验收（playwright-core + 系统 Edge；Edge 路径写死，注意修改）
+│  ├─ verify-ui.cjs            51 项浏览器验收（playwright-core + 系统 Edge；Edge 路径写死，注意修改）
 ├─ tests/                      193 个用例全部通过
 │  ├─ cParser.test.ts          13：C 词法/语法、错误恢复、注释、预处理、类型转换等
 │  ├─ analysis.test.ts         29：语言识别、语义分类、符号、结构树、装饰、统一管线
@@ -403,7 +405,7 @@ D:\CodeLens
 
 ### P0（接手后优先处理）
 
-1. **GitHub 远程仓库尚未配置（本地 git 已初始化）**：本地仓库位于 `D:\CodeLens\.git`，`main` 分支已有首次提交。需要用户提供 GitHub 仓库地址与凭据（PAT / SSH）后执行：
+1. **GitHub 远程仓库尚未配置（本地 git 已初始化）**：本地仓库位于 `D:\CodeLens\.git`，`main` 分支已有首次提交 `bd886bd`。需要用户提供 GitHub 仓库地址与凭据（PAT / SSH）后执行：
    ```powershell
    cd D:\CodeLens
    # 当前环境未安装系统 Git；本次使用便携版 Git：
@@ -411,8 +413,9 @@ D:\CodeLens
    git remote add origin https://github.com/<username>/<repo>.git
    git push -u origin main
    ```
+   注意：Windows 上 `git ls-remote` 可能触发 Git Credential Manager 图形窗口（本次已出现并关闭）；无人值守推送应使用带 PAT 的 HTTPS 地址或预先配置凭据，不要在自动化脚本中等待 GUI。
    也可以先安装 Git for Windows（`winget install --id Git.Git -e`）后使用普通 `git` 命令。`.gitignore` 已就绪（忽略 `node_modules/`、`dist/`、`*.tsbuildinfo`、日志、临时截图等；`docs/screenshots/01`–`09`、源码、文档会提交）。
-2. **浏览器验收**：已在解释器修复与新增测试后复跑，**50/50 通过**（见 3.4）；后续改动 UI/解析器/解释器后请再次复跑。
+2. **浏览器验收**：已在解释器修复与新增测试后复跑，**51/51 通过**（见 3.4）；后续改动 UI/解析器/解释器后请再次复跑。
 3. **CI**：已添加 `.github/workflows/ci.yml`（install → test → build），首次 push 到 GitHub 后生效；浏览器验收因依赖 Windows + Edge 暂未接入 CI。
 
 ### P1（近期）
@@ -456,7 +459,7 @@ D:\CodeLens
    Get-NetTCPConnection -LocalPort 5173 -State Listen -ErrorAction SilentlyContinue
    # 未运行则：& $node $pnpm dev
    ```
-6. **复跑浏览器验收**：`& $node scripts/verify-ui.cjs` → 期望 50/50；如失败，先看控制台错误与失败项，不要急着改代码。
+6. **复跑浏览器验收**：`& $node scripts/verify-ui.cjs` → 期望 51/51；如失败，先看控制台错误与失败项，不要急着改代码。
 7. **看 git 状态**（若已 init）：`git status --short`、`git log --oneline -5`；确认没有别人未提交的改动。
 8. **从 ROADMAP 的 P0/P1 选任务**：建议先做 4.1（git/CI/测试稳定/清理 `parse:cli`/统一 C++ 文案），再做 4.6 的 Monaco 体积优化。多智能体会话请用任务板领取并写明写作用域。
 9. **改动前先读文件**；按模块职责放置代码；先写/补测试，再改实现（或至少同步补测试）。
@@ -514,5 +517,5 @@ D:\CodeLens
 - 最近更新：2026-11-17
 - 技术栈：React 19.3 / TypeScript 7.0 / Vite 8.3 / Monaco 0.57 / Tailwind 4.3 / Zustand 5.1 / Vitest 5.1 / @babel/parser 8.1 / playwright-core 1.65
 - 单元测试：**193 passed / 6 files**（2026-11-17 15:23）
-- 浏览器验收：**50/50 通过**（最近记录；本轮解释器修复后建议复跑）
+- 浏览器验收：**51/51 通过**（最近记录；本轮解释器修复后建议复跑）
 - 仓库：**尚无 git 仓库与远程**

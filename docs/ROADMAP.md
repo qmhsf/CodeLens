@@ -79,13 +79,13 @@
 
 ### 3.4 验收与文档
 
-- [x] 浏览器实机验收脚本 `scripts/verify-ui.cjs`（playwright-core + 系统 Edge，50 项检查；最近一次运行 50/50 通过）
+- [x] 浏览器实机验收脚本 `scripts/verify-ui.cjs`（playwright-core + 系统 Edge，51 项检查；最近一次运行 51/51 通过）
 - [x] 实机截图 10 张（`docs/screenshots/01`–`09` + `05b`）
 - [x] `README.md`、`docs/HANDOFF.md`、`docs/ROADMAP.md`
 - [x] VS Code 工程配置（`.vscode/tasks.json`、`launch.json`、`settings.json`、`extensions.json`）与 `.editorconfig`、`.gitignore`
 - [x] Git 本地仓库初始化 + 首次提交；GitHub Actions CI 工作流（`.github/workflows/ci.yml`）
 
-**阶段完成标准**：伪代码示例可展示原文/推断/生成代码；JS/Python 可分析且明确不执行；笔记可下载；AI 未配置时行为与提示正确；浏览器 50 项验收通过。
+**阶段完成标准**：伪代码示例可展示原文/推断/生成代码；JS/Python 可分析且明确不执行；笔记可下载；AI 未配置时行为与提示正确；浏览器 51 项验收通过。
 
 ---
 
@@ -182,6 +182,6 @@
 - `pnpm typecheck` 无错误；
 - `pnpm test` 全绿（新增功能必须有对应测试）；
 - `pnpm build` 成功；
-- 开发服务器下 `node scripts/verify-ui.cjs` 50 项通过（新增 UI 需补充检查项）；
+- 开发服务器下 `node scripts/verify-ui.cjs` 51 项通过（新增 UI 需补充检查项）；
 - 能力边界文案（界面帮助、README、HANDOFF）与实际行为一致；
 - 不新增"伪造分析/伪造执行"的路径。

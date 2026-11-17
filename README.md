@@ -295,7 +295,7 @@ CodeLens/
 │  └─ fixtures/                  # 验收脚本生成的临时测试文件（已忽略）
 ├─ public/favicon.svg
 ├─ scripts/
-│  ├─ verify-ui.cjs              # 50 项浏览器实机验收（playwright-core + Edge）
+│  ├─ verify-ui.cjs              # 51 项浏览器实机验收（playwright-core + Edge）
 ├─ tests/                        # Vitest 单元测试
 │  ├─ cParser.test.ts            # C 词法/语法解析
 │  ├─ analysis.test.ts           # 语言识别、语义分类、符号、结构树、装饰、管线
@@ -369,9 +369,9 @@ pnpm test:watch    # 监听模式
 
 最近一次实测（2026-11-17）：**6 个测试文件、193 个用例全部通过**。测试数量会随开发变化，请以 `pnpm test` 的实际输出为准。
 
-### 浏览器实机验收（50 项）
+### 浏览器实机验收（51 项）
 
-`scripts/verify-ui.cjs` 使用 `playwright-core` 驱动**系统安装的 Microsoft Edge**（无头模式），自动检查 50 项：页面与三栏布局、Monaco 语义装饰生效、结构树行数、释义面板、点击代码后释义更新与关联高亮、执行快照与变量面板、链表/堆内存可视化、单步推进、输出控制台、执行结束输出、解释深度切换、语义类别开关、本地文件导入与语言识别、伪代码分析与生成代码、浅色主题、设置弹窗、浏览器控制台无错误、页面无未捕获异常等。
+`scripts/verify-ui.cjs` 使用 `playwright-core` 驱动**系统安装的 Microsoft Edge**（无头模式），自动检查 51 项：页面与三栏布局、Monaco 语义装饰生效、结构树行数、释义面板、点击代码后释义更新与关联高亮、执行快照与变量面板、链表/堆内存可视化、单步推进、输出控制台、执行结束输出、解释深度切换、语义类别开关、本地文件导入与语言识别、伪代码分析与生成代码、浅色主题、设置弹窗、浏览器控制台无错误、页面无未捕获异常等。
 
 ```bash
 # 1. 先启动开发服务器（保持运行）
@@ -380,14 +380,14 @@ pnpm dev
 # 2. 另开终端运行验收
 cd D:\CodeLens
 node scripts/verify-ui.cjs
-# 输出 "50/50 项通过" 即成功（脚本同时把截图写入 docs/screenshots/）
+# 输出 "51/51 项通过" 即成功（脚本同时把截图写入 docs/screenshots/）
 ```
 
 注意：
 
 - 脚本中 Edge 路径默认为 `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`；若你的 Edge 安装位置不同，请修改 `scripts/verify-ui.cjs` 顶部的 `EDGE` 常量。
 - 可通过环境变量覆盖被测地址：`set CODELENS_URL=http://127.0.0.1:5173`（PowerShell 用 `$env:CODELENS_URL="..."`）。
-- 脚本会重新生成 `docs/screenshots/01`–`09` 截图，并创建 `docs/fixtures/import-test.c`。
+- 脚本会重新生成 `docs/screenshots/01`–`09` 截图，（文件导入检查使用内存 File 对象，不再生成临时文件）。
 
 ---
 

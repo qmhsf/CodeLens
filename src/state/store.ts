@@ -680,7 +680,11 @@ export const useAppStore = create<AppState>()(
 
 let executionRunToken = 0;
 
-// 开发环境下方便在控制台检查分析结果
-if (import.meta.env.DEV && typeof window !== 'undefined') {
-  (window as unknown as { __codelensStore?: unknown }).__codelensStore = useAppStore;
+// 开发环境或显式 ?debug=1 时暴露 store，供调试与浏览器实机验收使用；
+// 正常线上访问不会挂载该全局对象，避免暴露内部状态。
+if (typeof window !== 'undefined') {
+  const debugEnabled = import.meta.env.DEV || new URLSearchParams(window.location.search).has('debug');
+  if (debugEnabled) {
+    (window as unknown as { __codelensStore?: unknown }).__codelensStore = useAppStore;
+  }
 }
